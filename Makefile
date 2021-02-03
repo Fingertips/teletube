@@ -7,7 +7,7 @@ teletube: main.cr src/**/*.cr
 	@du -sh teletube
 
 clean:
-	rm -rf .crystal teletube .deps .shards libs
+	rm -rf .crystal teletube .deps .shards libs lib *.dwarf
 
 PREFIX ?= /usr/local
 
