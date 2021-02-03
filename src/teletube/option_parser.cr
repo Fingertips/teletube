@@ -9,7 +9,7 @@ module Teletube
         parser.separator "Commands:"
 
         parser.on("config", "Configure common options.") do
-          context.command = "config"
+          context.resource = "config"
           parser.on("--token TOKEN", "Access token used to access the web service") do |token|
             if token.empty?
               context.errors << "Please specify an access token."
