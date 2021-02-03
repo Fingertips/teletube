@@ -26,6 +26,16 @@ module Teletube
           end
         end
 
+        parser.on("channels", "Interact with channels.") do
+          context.resource = "channels"
+          context.command = "list"
+          parser.separator ""
+          parser.separator "Actions:"
+          parser.on("list", "List all owned channels.") do
+            context.command = "list"
+          end
+        end
+
         parser.separator "Other options:"
         parser.on("-v", "--verbose", "Use log output to explain what's going on.") do
           context.verbose = true
