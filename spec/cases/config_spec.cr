@@ -30,4 +30,20 @@ describe Teletube::Config do
     config.token.should eq("cb70c152644b832148c5ca5410f30d30")
     config.endpoint.should eq("https://api.example.com")
   end
+
+  it "does not overwrite existing config when updated without values" do
+    config_path = File.expand_path("spec/tmp/config.yml", Dir.current)
+    config = Teletube::Config.load(config_path)
+    config.attributes = {} of String => String
+    config.token.should eq("cb70c152644b832148c5ca5410f30d30")
+    config.endpoint.should eq("https://api.example.com")
+  end
+
+  it "does not overwrite existing config with empty values" do
+    config_path = File.expand_path("spec/tmp/config.yml", Dir.current)
+    config = Teletube::Config.load(config_path)
+    config.attributes = { "token" => "", "endpoint" => "" } of String => String
+    config.token.should eq("cb70c152644b832148c5ca5410f30d30")
+    config.endpoint.should eq("https://api.example.com")
+  end
 end

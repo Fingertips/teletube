@@ -16,13 +16,17 @@ module Teletube
     end
 
     def attributes=(attributes : YAML::Any)
-      @token = attributes["token"]? ? attributes["token"].as_s : ""
-      @endpoint = attributes["endpoint"]? ? attributes["endpoint"].as_s : ENDPOINT
+      @token = attributes["token"].as_s if attributes["token"]
+      @endpoint = attributes["endpoint"].as_s if attributes["endpoint"]
     end
 
     def attributes=(attributes : Hash(String, String))
-      @token = attributes.fetch("token", "")
-      @endpoint = attributes.fetch("endpoint", ENDPOINT)
+      @token = attributes["token"] unless attributes.fetch("token", "").empty?
+      @endpoint = attributes["endpoint"] unless attributes.fetch("endpoint", "").empty?
+    end
+
+    def endpoint
+      @endpoint || ENDPOINT
     end
 
     def save(path = PATH)

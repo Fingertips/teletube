@@ -17,6 +17,13 @@ module Teletube
               context.params["token"] = token
             end
           end
+          parser.on("--endpoint ENDPOINT", "Base endpoint to use to contact the web service") do |endpoint|
+            if endpoint.empty?
+              context.errors << "Please specify and endpoint."
+            else
+              context.params["endpoint"] = endpoint
+            end
+          end
         end
 
         parser.separator "Other options:"
