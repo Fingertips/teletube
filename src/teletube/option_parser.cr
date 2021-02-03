@@ -27,6 +27,9 @@ module Teletube
         end
 
         parser.separator "Other options:"
+        parser.on("-v", "--verbose", "Use log output to explain what's going on.") do
+          context.verbose = true
+        end
         parser.on("-h", "--help", "Show this help") do
           context.run = false
           puts parser

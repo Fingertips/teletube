@@ -9,6 +9,7 @@ describe Teletube::Context do
     context.command = "create"
     context.params = { "token" => "secret" }
     context.run = false
+    context.verbose = true
     context.command.should eq("create")
   end
 end

@@ -6,11 +6,13 @@ module Teletube
     property command : String?
     property params : Hash(String, String)
     property? run
+    property? verbose
 
     def initialize
       @errors = [] of String
       @params = {} of String => String
       @run = true
+      @verbose = false
     end
   end
 end
