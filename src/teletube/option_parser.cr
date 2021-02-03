@@ -41,6 +41,12 @@ module Teletube
               end
             end
           end
+          parser.on("show", "Show details about a channel.") do
+            context.command = "show"
+            parser.on("--id ID", "The identifier of the channel to show.") do |id|
+              context.params["id"] = id
+            end
+          end
         end
 
         parser.separator "Other options:"

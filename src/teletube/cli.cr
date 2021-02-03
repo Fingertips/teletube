@@ -26,8 +26,14 @@ module Teletube
         @config.attributes = context.params
         @config.save
       when "channels"
-        Teletube::Resources::Channels.new(context, @client).channels.each do |channel|
-          puts "* #{channel["name"]} (##{channel["id"]})"
+        resource = Teletube::Resources::Channels.new(context, @client)
+        case context.command
+        when "show"
+          pp resource.channel(context.params["id"])
+        else
+          resource.channels.each do |channel|
+            puts "* #{channel["name"]} (##{channel["id"]})"
+          end
         end
       else
         STDERR.puts("⚠️  Unimplemented resource #{context.resource}")
