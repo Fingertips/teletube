@@ -7,7 +7,7 @@ module Teletube
       end
 
       def channels
-        response = @client.get(path: "/api/v1/channels")
+        response = @client.get(path: "/api/v1/channels", params: @context.params)
         if response.status_code == 200
           JSON.parse(response.body).as_a
         else

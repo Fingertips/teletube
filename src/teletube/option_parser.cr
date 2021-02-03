@@ -33,6 +33,13 @@ module Teletube
           parser.separator "Actions:"
           parser.on("list", "List all owned channels.") do
             context.command = "list"
+            parser.on("--role ROLE", "The role of the authenticated profile.") do |role|
+              if %w[owner contributor].includes?(role)
+                context.params["role"] = role
+              else
+                context.errors << "Please specify either owner or contributor for the role."
+              end
+            end
           end
         end
 
