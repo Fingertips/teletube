@@ -1,5 +1,3 @@
-require "./resources/*"
-
 module Teletube
   class Cli
     property config : Config
@@ -8,7 +6,7 @@ module Teletube
     def initialize
       @context = Context.new
       @config = Config.load
-      @client = Teletube::Client.new(@config)
+      @client = Teletube::Client.new(@config, @context)
     end
 
     def run(argv)
@@ -25,16 +23,21 @@ module Teletube
       when "config"
         @config.attributes = context.params
         @config.save
+      when "categories"
+        puts @client.get_categories
       when "channels"
-        resource = Teletube::Resources::Channels.new(context, @client)
         case context.command
         when "show"
-          pp resource.channel(context.params["id"])
+          puts @client.get_channel
+        when "create"
+          puts @client.create_channel
         else
-          resource.channels.each do |channel|
-            puts "* #{channel["name"]} (##{channel["id"]})"
-          end
+          puts @client.get_channels
         end
+      when "languages"
+        puts @client.get_languages
+      when "profiles"
+        puts @client.get_profiles_me
       else
         STDERR.puts("⚠️  Unimplemented resource #{context.resource}")
         exit 1

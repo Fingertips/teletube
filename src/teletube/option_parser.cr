@@ -26,6 +26,11 @@ module Teletube
           end
         end
 
+        parser.on("categories", "Interact with categories.") do
+          context.resource = "categories"
+          context.command = "list"
+        end
+
         parser.on("channels", "Interact with channels.") do
           context.resource = "channels"
           context.command = "list"
@@ -41,12 +46,28 @@ module Teletube
               end
             end
           end
+          parser.on("create", "Create a new channel.") do
+            context.command = "create"
+            parser.on("--name NAME", "The name of the channel.") do |name|
+              context.params["name"] = name
+            end
+          end
           parser.on("show", "Show details about a channel.") do
             context.command = "show"
             parser.on("--id ID", "The identifier of the channel to show.") do |id|
               context.params["id"] = id
             end
           end
+        end
+
+        parser.on("languages", "Interact with languages.") do
+          context.resource = "languages"
+          context.command = "list"
+        end
+
+        parser.on("profiles", "Interact with user profiles.") do
+          context.resource = "profiles"
+          context.command = "me"
         end
 
         parser.separator "Other options:"
