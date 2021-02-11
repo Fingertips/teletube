@@ -58,6 +58,21 @@ module Teletube
               context.params["id"] = id
             end
           end
+          parser.on("update", "Update details for a channel.") do
+            context.command = "update"
+            parser.on("--id ID", "The identifier of the channel to update.") do |id|
+              context.params["id"] = id
+            end
+            parser.on("--name NAME", "The name of the channel.") do |name|
+              context.params["name"] = name
+            end
+          end
+          parser.on("destroy", "Destroy a channel.") do
+            context.command = "destroy"
+            parser.on("--id ID", "The identifier of the channel to destroy.") do |id|
+              context.params["id"] = id
+            end
+          end
         end
 
         parser.on("languages", "Interact with languages.") do

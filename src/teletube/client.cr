@@ -1,3 +1,5 @@
+require "json"
+
 module Teletube
   class Client
     def initialize(config : Teletube::Config, context : Teletube::Context)
@@ -8,10 +10,6 @@ module Teletube
 
     def get_categories
       handle_response(@http.get(path: "/api/v1/categories"))
-    end
-
-    def get_channel
-      handle_response(@http.get(path: "/api/v1/channels/#{@context.params["id"]}"))
     end
 
     def get_channels
@@ -27,6 +25,22 @@ module Teletube
       response.body
     end
 
+    def get_channel
+      handle_response(@http.get(path: "/api/v1/channels/#{@context.params["id"]}"))
+    end
+
+    def update_channel
+      handle_response(
+        @http.patch(path: "/api/v1/channels/#{@context.params["id"]}", params: @context.params)
+      )
+    end
+
+    def destroy_channel
+      handle_response(
+        @http.delete(path: "/api/v1/channels/#{@context.params["id"]}")
+      )
+    end
+
     def get_languages
       handle_response(@http.get(path: "/api/v1/languages"))
     end
@@ -35,9 +49,16 @@ module Teletube
       handle_response(@http.get(path: "/api/v1/profiles/me"))
     end
 
+    def encoded_json(params)
+      
+    end
+
     def handle_response(response)
-      if response.status_code == 200
+      case response.status_code
+      when 200
         response.body
+      when 404
+        "Not found"
       else
         "Failed"
       end

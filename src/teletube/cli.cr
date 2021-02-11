@@ -27,10 +27,14 @@ module Teletube
         puts @client.get_categories
       when "channels"
         case context.command
-        when "show"
-          puts @client.get_channel
         when "create"
           puts @client.create_channel
+        when "show"
+          puts @client.get_channel
+        when "update"
+          puts @client.update_channel
+        when "destroy"
+          puts @client.destroy_channel
         else
           puts @client.get_channels
         end

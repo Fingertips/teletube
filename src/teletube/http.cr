@@ -5,15 +5,11 @@ require "http/client"
 module Teletube
   class Http
     def initialize(config : Teletube::Config)
-      uri = URI.parse(config.endpoint)
-      @http = HTTP::Client.new(
-        host: uri.host || "localhost",
-        port: uri.port || 500,
-        tls: uri.scheme == "https"
-      )
+      @http = HTTP::Client.new(uri: URI.parse(config.endpoint))
       @headers = HTTP::Headers.new
       @headers["Authorization"] = "Token #{config.token}"
       @headers["Accept"] = "application/json,*/*"
+      @headers["Content-Type"] = "application/json; charset=utf-8"
     end
 
     def get(path : String)
@@ -25,7 +21,15 @@ module Teletube
     end
 
     def post(path : String, params : Hash(String, String))
-      @http.post(path: path, headers: @headers, body: HTTP::Params.encode(params))
+      @http.post(path: path, headers: @headers, body: params.to_json)
+    end
+
+    def patch(path : String, params : Hash(String, String))
+      @http.patch(path: path, headers: @headers, body: params.to_json)
+    end
+
+    def delete(path : String)
+      @http.delete(path: path, headers: @headers)
     end
   end
 end
