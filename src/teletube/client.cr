@@ -41,6 +41,11 @@ module Teletube
       )
     end
 
+    def create_upload
+      response = @http.post(path: "/api/v1/channels/#{@context.params["channel_id"]}/uploads")
+      response.body
+    end
+
     def get_languages
       handle_response(@http.get(path: "/api/v1/languages"))
     end
@@ -49,11 +54,7 @@ module Teletube
       handle_response(@http.get(path: "/api/v1/profiles/me"))
     end
 
-    def encoded_json(params)
-      
-    end
-
-    def handle_response(response)
+      def handle_response(response)
       case response.status_code
       when 200
         response.body

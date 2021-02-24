@@ -20,6 +20,10 @@ module Teletube
       @http.get(path: "#{path}?#{HTTP::Params.encode(params)}", headers: @headers)
     end
 
+    def post(path : String)
+      @http.post(path: path, headers: @headers)
+    end
+
     def post(path : String, params : Hash(String, String))
       @http.post(path: path, headers: @headers, body: params.to_json)
     end

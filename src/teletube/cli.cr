@@ -38,6 +38,11 @@ module Teletube
         else
           puts @client.get_channels
         end
+      when "uploads"
+        case context.command
+        when "create"
+          puts @client.create_upload
+        end
       when "languages"
         puts @client.get_languages
       when "profiles"
