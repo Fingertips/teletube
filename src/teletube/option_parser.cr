@@ -83,6 +83,12 @@ module Teletube
               context.params["channel_id"] = channel_id
             end
           end
+          parser.on("perform", "Create a new upload, perform the upload, and create a video.") do
+            context.command = "perform"
+            parser.on("--channel-id ID", "The id of the channel that will contain the video.") do |channel_id|
+              context.params["channel_id"] = channel_id
+            end
+          end
         end
 
         parser.on("languages", "Interact with languages.") do

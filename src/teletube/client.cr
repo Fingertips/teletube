@@ -46,6 +46,48 @@ module Teletube
       response.body
     end
 
+    def perform_upload
+      instructions = JSON.parse(create_upload)
+      response = perform_file_upload(instructions)
+      case response.status_code
+      when 200..399
+        @context.params["secret"] = instructions["secret"].as_s
+        create_video
+      else
+        "Upload failed with status code #{response.status_code}"
+      end
+    end
+
+    def perform_file_upload(instructions)
+      uri = URI.parse(instructions["url"].as_s)
+      http = HTTP::Client.new(uri: uri)
+      body = IO::Memory.new
+      builder = HTTP::FormData::Builder.new(body)
+      instructions["params"].as_h.each do |name, value|
+        builder.field(name, value)
+      end
+      filename = @context.filename || ""
+      metadata = HTTP::FormData::FileMetadata.new(File.basename(filename))
+      File.open(filename: filename) do |file|
+        builder.file("file", file, metadata)
+      end
+      builder.finish
+
+      headers = HTTP::Headers.new
+      headers["Content-Type"] = builder.content_type
+
+      http.exec(
+        headers: headers,
+        method: instructions["method"].as_s.upcase,
+        path: uri.path.empty? ? "/" : uri.path,
+        body: body.to_s
+      )
+    end
+
+    def create_video
+      handle_response(@http.post(path: "/api/v1/uploads/#{@context.params["secret"]}/videos"))
+    end
+
     def get_languages
       handle_response(@http.get(path: "/api/v1/languages"))
     end
@@ -54,9 +96,9 @@ module Teletube
       handle_response(@http.get(path: "/api/v1/profiles/me"))
     end
 
-      def handle_response(response)
+    def handle_response(response)
       case response.status_code
-      when 200
+      when 200, 201
         response.body
       when 404
         "Not found"

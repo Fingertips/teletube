@@ -14,6 +14,7 @@ module Teletube
       if context.errors.any?
         print_errors
       elsif context.run?
+        @context.filename = argv.last
         run_command
       end
     end
@@ -42,6 +43,8 @@ module Teletube
         case context.command
         when "create"
           puts @client.create_upload
+        when "perform"
+          puts @client.perform_upload
         end
       when "languages"
         puts @client.get_languages

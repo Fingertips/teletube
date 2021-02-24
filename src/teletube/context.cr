@@ -5,6 +5,7 @@ module Teletube
     property resource : String?
     property command : String?
     property params : Hash(String, String)
+    property filename : String?
     property? run
     property? verbose
 
