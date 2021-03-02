@@ -4,7 +4,7 @@
 require 'fileutils'
 
 def basename
-  @base ||= File.expand_path('../build/Teletube.app', __dir__)
+  @basename ||= File.expand_path('../build/Teletube.app', __dir__)
 end
 
 def resources_source_path
@@ -53,15 +53,19 @@ exec_path = File.join(mac_os_path, 'teletube')
 teletube_dylibs = dylibs(exec_path)
 teletube_dylibs.each do |local_dylib_filename|
   app_dylib_filename = File.join(frameworks_path, File.basename(local_dylib_filename))
-  FileUtils.cp_r(local_dylib_filename, app_dylib_filename) rescue Errno::EACCES
+  begin
+    FileUtils.cp_r(local_dylib_filename, app_dylib_filename)
+  rescue StandardError
+    Errno::EACCES
+  end
   app_dylib_name = File.basename(app_dylib_filename)
-  run %[install_name_tool -change #{local_dylib_filename} @executable_path/../Frameworks/#{app_dylib_name} #{exec_path}]
+  run %(install_name_tool -change #{local_dylib_filename} @executable_path/../Frameworks/#{app_dylib_name} #{exec_path})
 
   dylibs(app_dylib_filename, '/usr/local/Cellar').each do |cellar_dylib_filename|
     app_dylib_name = File.basename(cellar_dylib_filename)
-    run %[install_name_tool -change #{cellar_dylib_filename} ./#{app_dylib_name} #{app_dylib_filename}]
+    run %(install_name_tool -change #{cellar_dylib_filename} ./#{app_dylib_name} #{app_dylib_filename})
   end
 end
 
-run %[rm -f build/Teletube.zip]
-run %[cd build && zip -r Teletube.zip Teletube.app]
+run %(rm -f build/Teletube.zip)
+run %(cd build && zip -r Teletube.zip Teletube.app)
