@@ -1,4 +1,5 @@
 /spec/tmp
 /teletube
 /lib
+/build
 *.dwarf
