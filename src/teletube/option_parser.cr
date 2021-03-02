@@ -79,11 +79,41 @@ module Teletube
             parser.on("--channel-id ID", "The id of the channel that will contain the video.") do |channel_id|
               context.params["channel_id"] = JSON::Any.new(channel_id)
             end
+            Teletube::Resources::Video.parse_properties(parser, context)
           end
           parser.on("perform", "Create a new upload, perform the upload, and create a video.") do
             context.command = "perform"
             parser.on("--channel-id ID", "The id of the channel that will contain the video.") do |channel_id|
               context.params["channel_id"] = JSON::Any.new(channel_id)
+            end
+          end
+        end
+
+        parser.on("videos", "Interact with videos.") do
+          context.resource = "videos"
+          parser.on("list", "List all videos in a channel.") do
+            context.command = "list"
+            parser.on("--channel-id ID", "The identifier of the channel.") do |channel_id|
+              context.params["channel_id"] = JSON::Any.new(channel_id)
+            end
+          end
+          parser.on("show", "Show details about a video.") do
+            context.command = "show"
+            parser.on("--id ID", "The identifier of the video to show.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+          end
+          parser.on("update", "Update details for a video.") do
+            context.command = "update"
+            parser.on("--id ID", "The identifier of the video to update.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+            Teletube::Resources::Video.parse_properties(parser, context)
+          end
+          parser.on("destroy", "Destroy a video.") do
+            context.command = "destroy"
+            parser.on("--id ID", "The identifier of the video to destroy.") do |id|
+              context.params["id"] = JSON::Any.new(id)
             end
           end
         end

@@ -6,7 +6,8 @@ require 'json'
 
 BASE_URI = 'https://tube.plz2.work'
 RESOURCES = {
-  'channel' => '/schema/v1/channel.json'
+  'channel' => '/schema/v1/channel.json',
+  'video' => '/schema/v1/video.json'
 }.freeze
 
 class Property
@@ -54,8 +55,8 @@ def resource_callbacks(snake_case, request_path)
       CALLBACK
     else
       <<~CALLBACK
-        parser.on("--#{property.dash_case} #{property.upcase}", "#{property.description}") do |#{property.snake_case}|
-          context.params["#{property.snake_case}"] = JSON::Any.new(#{property.snake_case})
+        parser.on("--#{property.dash_case} #{property.upcase}", "#{property.description}") do |value|
+          context.params["#{property.snake_case}"] = JSON::Any.new(value)
         end
       CALLBACK
     end

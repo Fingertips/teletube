@@ -84,8 +84,28 @@ module Teletube
       )
     end
 
+    def get_videos
+      handle_response(@http.get(path: "/api/v1/channels/#{@context.params["channel_id"]}/videos"))
+    end
+
     def create_video
       handle_response(@http.post(path: "/api/v1/uploads/#{@context.params["secret"]}/video"))
+    end
+
+    def get_video
+      handle_response(@http.get(path: "/api/v1/videos/#{@context.params["id"]}"))
+    end
+
+    def update_video
+      handle_response(
+        @http.patch(path: "/api/v1/videos/#{@context.params["id"]}", params: @context.params)
+      )
+    end
+
+    def destroy_video
+      handle_response(
+        @http.delete(path: "/api/v1/videos/#{@context.params["id"]}")
+      )
     end
 
     def get_languages

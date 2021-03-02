@@ -2,20 +2,20 @@ module Teletube
   module Resources
     class Channel
       macro parse_properties(parser, context)
-        parser.on("--name NAME", "Display name of the channel.") do |name|
-          context.params["name"] = JSON::Any.new(name)
+        parser.on("--name NAME", "Display name of the channel.") do |value|
+          context.params["name"] = JSON::Any.new(value)
         end
-        parser.on("--description DESCRIPTION", "Description of a channel, the text may contain a limited set of HTML tags: p, h3, ul, ol, li, pre, blockquote, a, em, strong.") do |description|
-          context.params["description"] = JSON::Any.new(description)
+        parser.on("--description DESCRIPTION", "Description of a channel, the text may contain a limited set of HTML tags: p, h3, ul, ol, li, pre, blockquote, a, em, strong.") do |value|
+          context.params["description"] = JSON::Any.new(value)
         end
-        parser.on("--category CATEGORY", "Category for the channel. Mostly used by the podcast functionality to include a category in the feed. See the categories endpoint for a list of valid values.") do |category|
-          context.params["category"] = JSON::Any.new(category)
+        parser.on("--category CATEGORY", "Category for the channel. Mostly used by the podcast functionality to include a category in the feed. See the categories endpoint for a list of valid values.") do |value|
+          context.params["category"] = JSON::Any.new(value)
         end
-        parser.on("--language LANGUAGE", "Primary language of the channel in ISO 639 notation. Mostly used by the podcast functionality to include a language in the feed. See the languages endpoint for a list of valid values.") do |language|
-          context.params["language"] = JSON::Any.new(language)
+        parser.on("--language LANGUAGE", "Primary language of the channel in ISO 639 notation. Mostly used by the podcast functionality to include a language in the feed. See the languages endpoint for a list of valid values.") do |value|
+          context.params["language"] = JSON::Any.new(value)
         end
-        parser.on("--viewable-by VIEWABLE_BY", "Gives permission to see the channel and its videos to a group of users. See the create channel form on the website to understand how permissions work. When using collaborators you will have to assign roles to profiles in relation to the channel.") do |viewable_by|
-          context.params["viewable_by"] = JSON::Any.new(viewable_by)
+        parser.on("--viewable-by VIEWABLE_BY", "Gives permission to see the channel and its videos to a group of users. See the create channel form on the website to understand how permissions work. When using collaborators you will have to assign roles to profiles in relation to the channel.") do |value|
+          context.params["viewable_by"] = JSON::Any.new(value)
         end
         parser.on("--open-channel", "Open Channels contain teaching, learning, and research videos intended to be freely used by everyone. Requires `viewable_by` to be `all`.") do
           context.params["open_channel"] = JSON::Any.new(true)

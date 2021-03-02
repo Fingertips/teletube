@@ -49,6 +49,17 @@ module Teletube
         when "perform"
           puts @client.perform_upload
         end
+      when "videos"
+        case context.command
+        when "show"
+          puts @client.get_video
+        when "update"
+          puts @client.update_video
+        when "destroy"
+          puts @client.destroy_video
+        else
+          puts @client.get_videos
+        end
       when "languages"
         puts @client.get_languages
       when "profiles"
