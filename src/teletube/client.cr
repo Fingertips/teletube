@@ -51,7 +51,7 @@ module Teletube
       response = perform_file_upload(instructions)
       case response.status_code
       when 200..399
-        @context.params["secret"] = instructions["secret"].as_s
+        @context.params["secret"] = instructions["secret"]
         create_video
       else
         "Upload failed with status code #{response.status_code}"

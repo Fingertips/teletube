@@ -22,7 +22,10 @@ module Teletube
     def run_command
       case context.resource
       when "config"
-        @config.attributes = context.params
+        @config.attributes = {
+          "endpoint" => context.params["endpoint"].as_s,
+          "token" => context.params["token"].as_s
+        }
         @config.save
       when "categories"
         puts @client.get_categories

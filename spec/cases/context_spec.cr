@@ -7,7 +7,7 @@ describe Teletube::Context do
     context.errors = ["Something went wrong"]
     context.resource = "channels"
     context.command = "create"
-    context.params = { "token" => "secret" }
+    context.params = { "token" => JSON::Any.new("secret") }
     context.run = false
     context.verbose = true
     context.command.should eq("create")
