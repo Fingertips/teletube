@@ -85,7 +85,7 @@ module Teletube
     end
 
     def create_video
-      handle_response(@http.post(path: "/api/v1/uploads/#{@context.params["secret"]}/videos"))
+      handle_response(@http.post(path: "/api/v1/uploads/#{@context.params["secret"]}/video"))
     end
 
     def get_languages
@@ -97,14 +97,8 @@ module Teletube
     end
 
     def handle_response(response)
-      case response.status_code
-      when 200, 201
-        response.body
-      when 404
-        "Not found"
-      else
-        "Failed"
-      end
+      puts "⚡️ #{response.status} (#{response.status_code})"
+      puts response.body unless response.body.blank?
     end
   end
 end

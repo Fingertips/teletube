@@ -2,12 +2,14 @@ all: teletube
 
 teletube: main.cr src/**/*.cr
 	shards
+	ruby scripts/options.rb
 	crystal build -o teletube main.cr
 	@strip teletube
 	@du -sh teletube
 
 release: main.cr src/**/*.cr
 	shards
+	ruby scripts/options.rb
 	crystal build main.cr --release -o teletube
 	@strip teletube
 	@du -sh teletube
