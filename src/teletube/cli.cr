@@ -14,7 +14,7 @@ module Teletube
       if context.errors.any?
         print_errors
       elsif context.run?
-        @context.filename = argv.last
+        @context.filename = argv.empty? ? nil : argv.last
         run_command
       end
     end

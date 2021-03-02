@@ -36,7 +36,11 @@ module Teletube
     end
 
     def self.load(path = PATH)
-      Config.new(YAML.parse(File.exists?(path) ? File.read(path) : "{}"))
+      if File.exists?(path)
+        Config.new(YAML.parse(File.read(path)))
+      else
+        Config.new
+      end
     rescue e
       raise "Config file is invalid: #{e.message}"
     end
