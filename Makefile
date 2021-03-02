@@ -14,7 +14,7 @@ release: main.cr src/**/*.cr
 	ruby scripts/build.rb
 
 clean:
-	rm -rf .crystal teletube .deps .shards libs lib *.dwarf
+	rm -rf .crystal teletube .deps .shards libs lib *.dwarf build
 
 PREFIX ?= /usr/local
 
