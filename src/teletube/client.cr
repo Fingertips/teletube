@@ -65,7 +65,12 @@ module Teletube
       case response.status_code
       when 200..399
         @context.params["secret"] = instructions["secret"]
-        create_video
+        case @context.params.fetch("purpose", nil)
+        when "artwork"
+          create_artwork
+        else
+          create_video
+        end
       else
         "Upload failed with status code #{response.status_code}"
       end

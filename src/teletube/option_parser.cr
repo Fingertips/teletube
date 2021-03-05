@@ -91,10 +91,13 @@ module Teletube
               context.params["purpose"] = JSON::Any.new(purpose)
             end
           end
-          parser.on("perform", "Create a new upload, perform the upload, and create a video.") do
+          parser.on("perform", "Create a new upload, perform the upload, and create the object.") do
             context.command = "perform"
-            parser.on("--channel-id ID", "The id of the channel that will contain the video.") do |channel_id|
+            parser.on("--channel-id ID", "The id of the channel that will contain the video or artwork.") do |channel_id|
               context.params["channel_id"] = JSON::Any.new(channel_id)
+            end
+            parser.on("--purpose PURPOSE", "The purpose of the upload: video or artwork.") do |purpose|
+              context.params["purpose"] = JSON::Any.new(purpose)
             end
           end
         end
