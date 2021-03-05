@@ -9,6 +9,14 @@ module Teletube
         parser.separator ""
         parser.separator "Commands:"
 
+        parser.on("artworks", "Interact with channel artworks.") do
+          context.resource = "artworks"
+          context.command = "create"
+          parser.on("--secret SECRET", "Upload secret used to create the artwork.") do |secret|
+            context.params["secret"] = JSON::Any.new(secret)
+          end
+        end
+
         parser.on("config", "Configure common options.") do
           context.resource = "config"
           parser.on("--token TOKEN", "Access token used to access the web service") do |token|
@@ -79,7 +87,9 @@ module Teletube
             parser.on("--channel-id ID", "The id of the channel that will contain the video.") do |channel_id|
               context.params["channel_id"] = JSON::Any.new(channel_id)
             end
-            Teletube::Resources::Video.parse_properties(parser, context)
+            parser.on("--purpose PURPOSE", "The purpose of the upload: video or artwork.") do |purpose|
+              context.params["purpose"] = JSON::Any.new(purpose)
+            end
           end
           parser.on("perform", "Create a new upload, perform the upload, and create a video.") do
             context.command = "perform"
@@ -96,6 +106,13 @@ module Teletube
             parser.on("--channel-id ID", "The identifier of the channel.") do |channel_id|
               context.params["channel_id"] = JSON::Any.new(channel_id)
             end
+          end
+          parser.on("create", "Create a video using an upload.") do
+            context.command = "create"
+            parser.on("--secret SECRET", "Upload secret used to create the video.") do |secret|
+              context.params["secret"] = JSON::Any.new(secret)
+            end
+            Teletube::Resources::Video.parse_properties(parser, context)
           end
           parser.on("show", "Show details about a video.") do
             context.command = "show"

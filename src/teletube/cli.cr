@@ -21,6 +21,8 @@ module Teletube
 
     def run_command
       case context.resource
+      when "artworks"
+        @client.create_artwork
       when "config"
         @config.attributes = {
           "endpoint" => context.params["endpoint"].as_s,
@@ -28,49 +30,51 @@ module Teletube
         }
         @config.save
       when "categories"
-        puts @client.get_categories
+        @client.get_categories
       when "channels"
         case context.command
         when "create"
-          puts @client.create_channel
+          @client.create_channel
         when "show"
-          puts @client.get_channel
+          @client.get_channel
         when "update"
-          puts @client.update_channel
+          @client.update_channel
         when "destroy"
-          puts @client.destroy_channel
+          @client.destroy_channel
         else
-          puts @client.get_channels
+          @client.get_channels
         end
       when "uploads"
         case context.command
         when "create"
-          puts @client.create_upload
+          @client.create_upload
         when "perform"
-          puts @client.perform_upload
+          @client.perform_upload
         end
       when "videos"
         case context.command
+        when "create"
+          @client.create_video
         when "show"
-          puts @client.get_video
+          @client.get_video
         when "update"
-          puts @client.update_video
+          @client.update_video
         when "destroy"
-          puts @client.destroy_video
+          @client.destroy_video
         else
-          puts @client.get_videos
+          @client.get_videos
         end
       when "languages"
         puts @client.get_languages
       when "profiles"
         case context.command
         when "show"
-          puts @client.get_profile
+          @client.get_profile
         else
-          puts @client.get_profiles_me
+          @client.get_profiles_me
         end
       when "progress"
-        puts @client.get_video_progress
+        @client.get_video_progress
       else
         STDERR.puts("⚠️  Unimplemented resource #{context.resource}")
         exit 1

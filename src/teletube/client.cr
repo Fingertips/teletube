@@ -1,3 +1,4 @@
+
 require "json"
 
 module Teletube
@@ -6,6 +7,10 @@ module Teletube
       @config = config
       @context = context
       @http = Teletube::Http.new(@config)
+    end
+
+    def create_artwork
+      handle_response(@http.post(path: "/api/v1/uploads/#{@context.params["secret"]}/artwork"))
     end
 
     def get_categories
@@ -21,8 +26,7 @@ module Teletube
     end
 
     def create_channel
-      response = @http.post(path: "/api/v1/channels", params: @context.params)
-      response.body
+      handle_response(@http.post(path: "/api/v1/channels", params: @context.params))
     end
 
     def get_channel
@@ -42,12 +46,21 @@ module Teletube
     end
 
     def create_upload
-      response = @http.post(path: "/api/v1/channels/#{@context.params["channel_id"]}/uploads")
-      response.body
+      response = case @context.params.fetch("purpose", nil)
+      when "artwork"
+        @http.post(
+          path: "/api/v1/channels/#{@context.params["channel_id"]}/uploads",
+          params: { "purpose" => @context.params["purpose"] }
+        )
+      else
+        @http.post(path: "/api/v1/channels/#{@context.params["channel_id"]}/uploads")
+      end
+      handle_response(response)
     end
 
     def perform_upload
-      instructions = JSON.parse(create_upload)
+      response = create_upload
+      instructions = JSON.parse(response.body)
       response = perform_file_upload(instructions)
       case response.status_code
       when 200..399
@@ -76,11 +89,13 @@ module Teletube
       headers = HTTP::Headers.new
       headers["Content-Type"] = builder.content_type
 
-      http.exec(
-        headers: headers,
-        method: instructions["method"].as_s.upcase,
-        path: uri.path.empty? ? "/" : uri.path,
-        body: body.to_s
+      handle_response(
+        http.exec(
+          headers: headers,
+          method: instructions["method"].as_s.upcase,
+          path: uri.path.empty? ? "/" : uri.path,
+          body: body.to_s
+        )
       )
     end
 
@@ -127,6 +142,7 @@ module Teletube
     def handle_response(response)
       puts "⚡️ #{response.status} (#{response.status_code})"
       puts response.body unless response.body.blank?
+      response
     end
   end
 end
