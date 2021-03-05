@@ -69,6 +69,8 @@ module Teletube
         else
           puts @client.get_profiles_me
         end
+      when "progress"
+        puts @client.get_video_progress
       else
         STDERR.puts("⚠️  Unimplemented resource #{context.resource}")
         exit 1

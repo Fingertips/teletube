@@ -128,9 +128,17 @@ module Teletube
           context.command = "me"
           parser.on("show", "Show details about a profile.") do
             context.command = "show"
-            parser.on("--id ID", "the identifier of the profile to show.") do |id|
+            parser.on("--id ID", "The identifier of the profile to show.") do |id|
               context.params["id"] = JSON::Any.new(id)
             end
+          end
+        end
+
+        parser.on("progress", "See progress of videos processing.") do
+          context.resource = "progress"
+          context.command = "show"
+          parser.on("--video-id ID", "The identifier of the video .") do |video_id|
+            context.params["video_id"] = JSON::Any.new(video_id)
           end
         end
 

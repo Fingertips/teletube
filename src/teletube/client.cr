@@ -120,6 +120,10 @@ module Teletube
       handle_response(@http.get(path: "/api/v1/profiles/me"))
     end
 
+    def get_video_progress
+      handle_response(@http.get(path: "/api/v1/videos/#{@context.params["video_id"]}/progress"))
+    end
+
     def handle_response(response)
       puts "⚡️ #{response.status} (#{response.status_code})"
       puts response.body unless response.body.blank?
