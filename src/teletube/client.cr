@@ -112,6 +112,10 @@ module Teletube
       handle_response(@http.get(path: "/api/v1/languages"))
     end
 
+    def get_profile
+      handle_response(@http.get(path: "/api/v1/profiles/#{@context.params["id"]}"))
+    end
+
     def get_profiles_me
       handle_response(@http.get(path: "/api/v1/profiles/me"))
     end

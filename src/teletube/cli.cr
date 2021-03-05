@@ -63,7 +63,12 @@ module Teletube
       when "languages"
         puts @client.get_languages
       when "profiles"
-        puts @client.get_profiles_me
+        case context.command
+        when "show"
+          puts @client.get_profile
+        else
+          puts @client.get_profiles_me
+        end
       else
         STDERR.puts("⚠️  Unimplemented resource #{context.resource}")
         exit 1

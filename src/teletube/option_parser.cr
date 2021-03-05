@@ -126,6 +126,12 @@ module Teletube
         parser.on("profiles", "Interact with user profiles.") do
           context.resource = "profiles"
           context.command = "me"
+          parser.on("show", "Show details about a profile.") do
+            context.command = "show"
+            parser.on("--id ID", "the identifier of the profile to show.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+          end
         end
 
         parser.separator "Other options:"
