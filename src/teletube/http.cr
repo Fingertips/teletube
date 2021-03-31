@@ -31,8 +31,26 @@ module Teletube
       @http.post(path: path, headers: @headers, body: params.to_json)
     end
 
+    def post(path : String, headers : HTTP::Headers)
+      all = @headers.dup
+      headers.each { |name, value| all[name] = value }
+      @http.post(path: path, headers: all)
+    end
+
+    def post(path : String, headers : HTTP::Headers, body : HTTP::Client::BodyType)
+      all = @headers.dup
+      headers.each { |name, value| all[name] = value }
+      @http.post(path: path, headers: all, body: body)
+    end
+
     def patch(path : String, params : Hash(String, JSON::Any))
       @http.patch(path: path, headers: @headers, body: params.to_json)
+    end
+
+    def patch(path : String, headers : HTTP::Headers, body : HTTP::Client::BodyType)
+      all = @headers.dup
+      headers.each { |name, value| all[name] = value }
+      @http.patch(path: path, headers: all, body: body)
     end
 
     def delete(path : String)

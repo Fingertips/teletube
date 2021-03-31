@@ -1,4 +1,3 @@
-
 require "json"
 
 module Teletube
@@ -10,7 +9,7 @@ module Teletube
     end
 
     def create_artwork
-      handle_response(@http.post(path: "/api/v1/uploads/#{@context.params["secret"]}/artwork"))
+      handle_response(@http.post(path: "/api/v1/uploads/#{@context.params["upload_id"]}/artwork"))
     end
 
     def get_categories
@@ -45,63 +44,90 @@ module Teletube
       )
     end
 
-    def create_upload
-      response = case @context.params.fetch("purpose", nil)
-      when "artwork"
-        @http.post(
-          path: "/api/v1/channels/#{@context.params["channel_id"]}/uploads",
-          params: { "purpose" => @context.params["purpose"] }
-        )
-      else
-        @http.post(path: "/api/v1/channels/#{@context.params["channel_id"]}/uploads")
-      end
-      handle_response(response)
-    end
+    class Upload
+      SEGMENT_SIZE = 5242880
 
-    def perform_upload
-      response = create_upload
-      instructions = JSON.parse(response.body)
-      response = perform_file_upload(instructions)
-      case response.status_code
-      when 200..399
-        @context.params["secret"] = instructions["secret"]
-        case @context.params.fetch("purpose", nil)
-        when "artwork"
-          create_artwork
-        else
-          create_video
+      property http : Teletube::Http
+      property filename : String
+      property location : String
+
+      def initialize(http, filename)
+        @http = http
+        @filename = filename
+        @location = ""
+      end
+
+      def id
+        path.split("/").last
+      end
+
+      def path
+        "/" + location.split("/")[3..-1].join("/")
+      end
+
+      def perform
+        create_file
+        upload_file
+      end
+
+      def create_file
+        headers = self.class.headers
+        headers["Upload-Length"] = File.size(filename).to_s
+        response = handle_response(http.post(path: "/files", headers: headers))
+        if response.status_code >= 200 && response.status_code < 300
+          @location = response.headers["Location"]
         end
-      else
-        "Upload failed with status code #{response.status_code}"
+        response
+      end
+
+      def upload_file
+        response = nil
+        offset = 0
+        headers = self.class.headers
+        segment = Bytes.new(SEGMENT_SIZE)
+        File.open(filename, "rb") do |file|
+          while (size = file.read(segment)) > 0
+            headers["Content-Type"] = "application/offset+octet-stream"
+            headers["Upload-Offset"] = offset.to_s
+            response = handle_response(http.patch(path: path, headers: headers, body: segment[0, size]))
+            if response.status_code >= 200 && response.status_code < 300
+              offset += segment.size
+            else
+              break
+            end
+          end
+        end
+        response
+      end
+
+      def handle_response(response)
+        STDERR.puts "⚡️ #{response.status} (#{response.status_code})"
+        puts response.body unless response.body.blank?
+        response
+      end
+
+      def self.headers
+        headers = HTTP::Headers.new
+        headers["Tus-Resumable"] = "1.0.0"
+        headers
       end
     end
 
-    def perform_file_upload(instructions)
-      uri = URI.parse(instructions["url"].as_s)
-      http = HTTP::Client.new(uri: uri)
-      body = IO::Memory.new
-      builder = HTTP::FormData::Builder.new(body)
-      instructions["params"].as_h.each do |name, value|
-        builder.field(name, value)
-      end
-      filename = @context.filename || ""
-      metadata = HTTP::FormData::FileMetadata.new(File.basename(filename))
-      File.open(filename: filename) do |file|
-        builder.file("file", file, metadata)
-      end
-      builder.finish
+    # Only creates a new file on tusd. Could technically be useful when you want to use a different
+    # client to actually upload the file.
+    def create_file
+      return unless @context.filename
 
-      headers = HTTP::Headers.new
-      headers["Content-Type"] = builder.content_type
+      upload = Upload.new(@http, @context.filename || "")
+      upload.create_file
+    end
 
-      handle_response(
-        http.exec(
-          headers: headers,
-          method: instructions["method"].as_s.upcase,
-          path: uri.path.empty? ? "/" : uri.path,
-          body: body.to_s
-        )
-      )
+    def upload_file
+      return unless @context.filename
+
+      upload = Upload.new(@http, @context.filename || "")
+      upload.perform
+      @context.params["upload_id"] = JSON::Any.new(upload.id)
     end
 
     def get_videos
@@ -109,7 +135,8 @@ module Teletube
     end
 
     def create_video
-      handle_response(@http.post(path: "/api/v1/uploads/#{@context.params["secret"]}/video"))
+      upload_file
+      handle_response(@http.post(path: "/api/v1/videos", params: @context.params))
     end
 
     def get_video
@@ -145,7 +172,7 @@ module Teletube
     end
 
     def handle_response(response)
-      puts "⚡️ #{response.status} (#{response.status_code})"
+      STDERR.puts "⚡️ #{response.status} (#{response.status_code})"
       puts response.body unless response.body.blank?
       response
     end

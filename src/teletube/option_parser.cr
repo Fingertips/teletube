@@ -80,25 +80,13 @@ module Teletube
           end
         end
 
-        parser.on("uploads", "Interact with uploads.") do
-          context.resource = "uploads"
-          parser.on("create", "Create a new upload.") do
+        parser.on("files", "Interact with files.") do
+          context.resource = "files"
+          parser.on("create", "Create a file.") do
             context.command = "create"
-            parser.on("--channel-id ID", "The id of the channel that will contain the video.") do |channel_id|
-              context.params["channel_id"] = JSON::Any.new(channel_id)
-            end
-            parser.on("--purpose PURPOSE", "The purpose of the upload: video or artwork.") do |purpose|
-              context.params["purpose"] = JSON::Any.new(purpose)
-            end
           end
-          parser.on("perform", "Create a new upload, perform the upload, and create the object.") do
-            context.command = "perform"
-            parser.on("--channel-id ID", "The id of the channel that will contain the video or artwork.") do |channel_id|
-              context.params["channel_id"] = JSON::Any.new(channel_id)
-            end
-            parser.on("--purpose PURPOSE", "The purpose of the upload: video or artwork.") do |purpose|
-              context.params["purpose"] = JSON::Any.new(purpose)
-            end
+          parser.on("upload", "Uploads a file.") do
+            context.command = "upload"
           end
         end
 
@@ -112,8 +100,14 @@ module Teletube
           end
           parser.on("create", "Create a video using an upload.") do
             context.command = "create"
-            parser.on("--secret SECRET", "Upload secret used to create the video.") do |secret|
-              context.params["secret"] = JSON::Any.new(secret)
+            parser.on("--channel-id ID", "The channel that will contain the video.") do |channel_id|
+              context.params["channel_id"] = JSON::Any.new(channel_id)
+            end
+            parser.on(
+              "--upload-id ID",
+              "Upload ID of the file that should be used to create the video. Optional when passing a filename."
+            ) do |file_id|
+              context.params["upload_id"] = JSON::Any.new(file_id)
             end
             Teletube::Resources::Video.parse_properties(parser, context)
           end
@@ -171,8 +165,8 @@ module Teletube
           puts parser
         end
 
-        parser.missing_option {}
-        parser.invalid_option {}
+        parser.missing_option { }
+        parser.invalid_option { }
       end
     end
   end

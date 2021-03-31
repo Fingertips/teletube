@@ -26,7 +26,7 @@ module Teletube
       when "config"
         @config.attributes = {
           "endpoint" => context.params["endpoint"].as_s,
-          "token" => context.params["token"].as_s
+          "token"    => context.params["token"].as_s,
         }
         @config.save
       when "categories"
@@ -44,12 +44,12 @@ module Teletube
         else
           @client.get_channels
         end
-      when "uploads"
+      when "files"
         case context.command
         when "create"
-          @client.create_upload
-        when "perform"
-          @client.perform_upload
+          @client.create_file
+        when "upload"
+          @client.upload_file
         end
       when "videos"
         case context.command
