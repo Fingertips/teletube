@@ -3,7 +3,7 @@ all: teletube
 teletube: main.cr src/**/*.cr
 	shards
 	ruby scripts/options.rb
-	crystal build -o teletube main.cr
+	crystal build --error-trace -o teletube main.cr
 	@strip teletube
 	@du -sh teletube
 
