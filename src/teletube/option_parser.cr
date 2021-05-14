@@ -179,6 +179,36 @@ module Teletube
               context.params["id"] = JSON::Any.new(id)
             end
           end
+          parser.on("artwork", "Show details about channel artwork.") do
+            context.command = "artwork"
+            parser.on("--channel-id ID", "The public identifier of the channel.") do |id|
+              context.params["channel_id"] = JSON::Any.new(id)
+            end
+          end
+          parser.on("video-variants", "Fetch a list of video variants for a video.") do
+            context.command = "video-variants"
+            parser.on("--video-id ID", "The public identifier of the video.") do |id|
+              context.params["video_id"] = JSON::Any.new(id)
+            end
+          end
+          parser.on("poster", "Show details about the poster for a video.") do
+            context.command = "poster"
+            parser.on("--video-id ID", "The public identifier of the video.") do |id|
+              context.params["video_id"] = JSON::Any.new(id)
+            end
+          end
+          parser.on("audio-variants", "Fetch a list of audio variants for a video.") do
+            context.command = "audio-variants"
+            parser.on("--video-id ID", "The public identifier of the video.") do |id|
+              context.params["video_id"] = JSON::Any.new(id)
+            end
+          end
+          parser.on("waveform", "Show details about the waveform for a video.") do
+            context.command = "waveform"
+            parser.on("--video-id ID", "The public identifier of the video.") do |id|
+              context.params["video_id"] = JSON::Any.new(id)
+            end
+          end
         end
 
         parser.separator "Other options:"

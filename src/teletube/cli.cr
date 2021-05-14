@@ -33,6 +33,16 @@ module Teletube
           @client.get_browsable_videos
         when "video"
           @client.get_browsable_video
+        when "artwork"
+          @client.get_browsable_artwork
+        when "video-variants"
+          @client.get_browsable_video_variants
+        when "poster"
+          @client.get_browsable_poster
+        when "audio-variants"
+          @client.get_browsable_audio_variants
+        when "waveform"
+          @client.get_browsable_waveform
         end
       when "config"
         @config.attributes = {

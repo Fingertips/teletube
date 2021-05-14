@@ -187,6 +187,26 @@ module Teletube
       handle_response(@http.get(path: "/api/v1/browse/videos/#{@context.params["id"]}"))
     end
 
+    def get_browsable_artwork
+      handle_response(@http.get(path: "/api/v1/browse/channels/#{@context.params["channel_id"]}/artwork"))
+    end
+
+    def get_browsable_video_variants
+      handle_response(@http.get(path: "/api/v1/browse/videos/#{@context.params["video_id"]}/video_variants"))
+    end
+
+    def get_browsable_poster
+      handle_response(@http.get(path: "/api/v1/browse/videos/#{@context.params["video_id"]}/poster"))
+    end
+
+    def get_browsable_audio_variants
+      handle_response(@http.get(path: "/api/v1/browse/videos/#{@context.params["video_id"]}/audio_variants"))
+    end
+
+    def get_browsable_waveform
+      handle_response(@http.get(path: "/api/v1/browse/videos/#{@context.params["video_id"]}/waveform"))
+    end
+
     def handle_response(response)
       STDERR.puts "⚡️ #{response.status} (#{response.status_code})"
       puts response.body unless response.body.blank?
