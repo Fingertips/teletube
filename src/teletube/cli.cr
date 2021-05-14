@@ -23,6 +23,17 @@ module Teletube
       case context.resource
       when "artworks"
         @client.create_artwork
+      when "browse"
+        case context.command
+        when "channels"
+          @client.get_browsable_channels
+        when "channel"
+          @client.get_browsable_channel
+        when "videos"
+          @client.get_browsable_videos
+        when "video"
+          @client.get_browsable_video
+        end
       when "config"
         @config.attributes = {
           "endpoint" => context.params["endpoint"].as_s,

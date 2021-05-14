@@ -156,6 +156,31 @@ module Teletube
           end
         end
 
+        parser.on("browse", "Browse viewable channels and videos.") do
+          context.resource = "browse"
+          context.command = "channels"
+          parser.on("channels", "List all viewable channels.") do
+          end
+          parser.on("channel", "Show details about a browsable channel.") do
+            context.command = "channel"
+            parser.on("--id ID", "The public identifier of the channel to show.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+          end
+          parser.on("videos", "List all viewable videos in a channel.") do
+            context.command = "videos"
+            parser.on("--channel-id ID", "The public identifier of the channel.") do |channel_id|
+              context.params["channel_id"] = JSON::Any.new(channel_id)
+            end
+          end
+          parser.on("video", "Show details about a browsable video.") do
+            context.command = "video"
+            parser.on("--id ID", "The public identifier of the video to show.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+          end
+        end
+
         parser.separator "Other options:"
         parser.on("-v", "--verbose", "Use log output to explain what's going on.") do
           context.verbose = true

@@ -171,6 +171,22 @@ module Teletube
       handle_response(@http.get(path: "/api/v1/videos/#{@context.params["video_id"]}/progress"))
     end
 
+    def get_browsable_channels
+      handle_response(@http.get(path: "/api/v1/browse/channels"))
+    end
+
+    def get_browsable_channel
+      handle_response(@http.get(path: "/api/v1/browse/channels/#{@context.params["id"]}"))
+    end
+
+    def get_browsable_videos
+      handle_response(@http.get(path: "/api/v1/browse/channels/#{@context.params["channel_id"]}/videos"))
+    end
+
+    def get_browsable_video
+      handle_response(@http.get(path: "/api/v1/browse/videos/#{@context.params["id"]}"))
+    end
+
     def handle_response(response)
       STDERR.puts "⚡️ #{response.status} (#{response.status_code})"
       puts response.body unless response.body.blank?

@@ -14,7 +14,7 @@ module Teletube
         parser.on("--language LANGUAGE", "Primary language of the channel in ISO 639 notation. Mostly used by the podcast functionality to include a language in the feed. See the languages endpoint for a list of valid values.") do |value|
           context.params["language"] = JSON::Any.new(value)
         end
-        parser.on("--viewable-by VIEWABLE_BY", "Gives permission to see the channel and its videos to a group of users. See the create channel form on the website to understand how permissions work. When using collaborators you will have to assign roles to profiles in relation to the channel.") do |value|
+        parser.on("--viewable-by VIEWABLE_BY", "Gives permission to see the channel and its videos to a group of users. See the create channel form on the website to understand how permissions work. After choosing the collaborator setting you can use the collaborators endpoint to manage collaborator permissions for profiles.") do |value|
           context.params["viewable_by"] = JSON::Any.new(value)
         end
         parser.on("--open-channel", "Open Channels contain teaching, learning, and research videos intended to be freely used by everyone. Requires `viewable_by` to be `all`.") do
