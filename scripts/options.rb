@@ -4,7 +4,7 @@
 require 'net/http'
 require 'json'
 
-BASE_URI = 'https://tube.plz2.work'
+BASE_URI = 'https://tube.switch.ch'
 RESOURCES = {
   'channel' => '/schema/v1/channel.json',
   'video' => '/schema/v1/video.json'
