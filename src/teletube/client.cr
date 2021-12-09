@@ -81,6 +81,19 @@ module Teletube
         response
       end
 
+      def get_upload_offset
+        offset = -1
+        while (offset < 0)
+          response = handle_response(http.head(path: path, headers: self.class.headers))
+          if response.status_code == 200
+            offset = response.headers["Upload-Offset"].to_i
+          elsif response.status_code == 423
+            sleep 10
+          end
+        end
+        offset
+      end
+
       def upload_file
         response = nil
         offset = 0
@@ -93,6 +106,11 @@ module Teletube
             response = handle_response(http.patch(path: path, headers: headers, body: segment[0, size]))
             if response.status_code >= 200 && response.status_code < 300
               offset += segment.size
+            elsif [502, 503].includes?(response.status_code)
+              @http.reset
+              offset = get_upload_offset
+              file.pos = offset
+              STDERR.puts "🗑 resetting offset to #{offset}"
             else
               break
             end
