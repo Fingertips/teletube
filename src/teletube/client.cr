@@ -76,6 +76,7 @@ module Teletube
         response = handle_response(http.post(path: "/files", headers: headers))
         if response.status_code >= 200 && response.status_code < 300
           @location = response.headers["Location"]
+          STDERR.puts "📃 #{id}"
         end
         response
       end
