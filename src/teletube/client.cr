@@ -45,7 +45,8 @@ module Teletube
     end
 
     class Upload
-      SEGMENT_SIZE = 5242880
+      # 50 megabytes
+      SEGMENT_SIZE = 52428800
 
       property http : Teletube::Http
       property filename : String
