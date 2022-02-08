@@ -154,6 +154,24 @@ module Teletube
       handle_response(@http.get(path: "/api/v1/videos/#{@context.params["video_id"]}/files"))
     end
 
+    def download_file
+      response = @http.get(path: "/api/v1/videos/#{@context.params["video_id"]}/files")
+      STDERR.puts "⚡️ #{response.status} (#{response.status_code})"
+      if response.status_code == 200
+        files = JSON.parse(response.body).as_a
+        if files.empty?
+          puts "🙁 The video does not have any files."
+        else
+          filename = files[0]["filename"] ? files[0]["filename"].as_s : "original.mov"
+          File.open(filename, "w") do |file|
+            HTTP::Client.get(files[0]["url"].as_s) do |response|
+              IO.copy(response.body_io, file)
+            end
+          end
+        end
+      end
+    end
+
     def get_videos
       handle_response(@http.get(path: "/api/v1/channels/#{@context.params["channel_id"]}/videos"))
     end

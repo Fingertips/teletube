@@ -94,6 +94,12 @@ module Teletube
           parser.on("upload", "Uploads a file.") do
             context.command = "upload"
           end
+          parser.on("download", "Download the latest upload.") do
+            context.command = "download"
+            parser.on("--video-id ID", "The identifier of the video.") do |video_id|
+              context.params["video_id"] = JSON::Any.new(video_id)
+            end
+          end
         end
 
         parser.on("videos", "Interact with videos.") do

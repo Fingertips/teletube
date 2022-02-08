@@ -71,6 +71,8 @@ module Teletube
           @client.create_file
         when "upload"
           @client.upload_file
+        when "download"
+          @client.download_file
         else
           @client.get_files
         end
