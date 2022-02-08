@@ -55,6 +55,24 @@ You can set other details about the video too, please use `--help` to see them.
 
     teletube videos create --help
 
+# Videos
+
+Look up a channel id with the channels listing explained earlier. Then you can list all videos in that channel.
+
+    teletube videos list --channel-id <id>
+
+# Files
+
+A video may have multiple files, one for each attempted processing job.
+
+    teletube files list --video-id <id>
+
+Each will have a URL and an optional original files. You can attempt to download the latest file uploaded this way.
+
+    teletube files download --video-id <id>
+
+Keep in mind that the download URLs will expire, so you shouldn't share them with others.
+
 # Help
 
 You can always end a command with `--help` to get more details. For example:
