@@ -150,6 +150,10 @@ module Teletube
       @context.params["upload_id"] = JSON::Any.new(upload.id)
     end
 
+    def get_files
+      handle_response(@http.get(path: "/api/v1/videos/#{@context.params["video_id"]}/files"))
+    end
+
     def get_videos
       handle_response(@http.get(path: "/api/v1/channels/#{@context.params["channel_id"]}/videos"))
     end

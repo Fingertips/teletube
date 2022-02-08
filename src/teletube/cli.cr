@@ -71,6 +71,8 @@ module Teletube
           @client.create_file
         when "upload"
           @client.upload_file
+        else
+          @client.get_files
         end
       when "videos"
         case context.command
