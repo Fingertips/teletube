@@ -213,6 +213,10 @@ module Teletube
       handle_response(@http.get(path: "/api/v1/videos/#{@context.params["video_id"]}/progress"))
     end
 
+    def get_trash
+      handle_response(@http.get(path: "/api/v1/trash"))
+    end
+
     def get_browsable_channels
       handle_response(@http.get(path: "/api/v1/browse/channels"))
     end

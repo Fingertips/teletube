@@ -168,6 +168,11 @@ module Teletube
           end
         end
 
+        parser.on("trash", "List all channels and videos marked for deletion.") do
+          context.resource = "trash"
+          context.command = "show"
+        end
+
         parser.on("browse", "Browse viewable channels and videos.") do
           context.resource = "browse"
           context.command = "channels"
