@@ -87,6 +87,8 @@ module Teletube
         end
       when "progress"
         @client.get_video_progress
+      when "restorations"
+        @client.create_restoration
       when "trash"
         @client.get_trash
       when "videos"

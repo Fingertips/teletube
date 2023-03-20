@@ -163,8 +163,21 @@ module Teletube
         parser.on("progress", "See progress of videos processing.") do
           context.resource = "progress"
           context.command = "show"
-          parser.on("--video-id ID", "The identifier of the video .") do |video_id|
+          parser.on("--video-id ID", "The identifier of the video.") do |video_id|
             context.params["video_id"] = JSON::Any.new(video_id)
+          end
+        end
+
+        parser.on("restorations", "Restore channels and videos marked for deletion.") do
+          context.resource = "restorations"
+          context.command = "create"
+
+          parser.on("--type TYPE", "Either ‘channels’ or ‘videos’.") do |type|
+            context.params["type"] = JSON::Any.new(type)
+          end
+
+          parser.on("--id ID", "The identifier of the video or channel.") do |id|
+            context.params["id"] = JSON::Any.new(id)
           end
         end
 
