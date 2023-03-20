@@ -76,6 +76,21 @@ module Teletube
         else
           @client.get_files
         end
+      when "languages"
+        puts @client.get_languages
+      when "profiles"
+        case context.command
+        when "show"
+          @client.get_profile
+        else
+          @client.get_profiles_me
+        end
+      when "progress"
+        @client.get_video_progress
+      when "restorations"
+        @client.create_restoration
+      when "trash"
+        @client.get_trash
       when "videos"
         case context.command
         when "create"
@@ -89,17 +104,6 @@ module Teletube
         else
           @client.get_videos
         end
-      when "languages"
-        puts @client.get_languages
-      when "profiles"
-        case context.command
-        when "show"
-          @client.get_profile
-        else
-          @client.get_profiles_me
-        end
-      when "progress"
-        @client.get_video_progress
       else
         STDERR.puts("⚠️  Unimplemented resource #{context.resource}")
         exit 1
