@@ -80,6 +80,34 @@ module Teletube
           end
         end
 
+        parser.on("documents", "Interact with documents.") do
+          context.resource = "documents"
+          parser.on("list", "List all documents uploaded for a video.") do
+            context.command = "list"
+            parser.on("--video-id ID", "The identifier of the video.") do |video_id|
+              context.params["video_id"] = JSON::Any.new(video_id)
+            end
+          end
+          parser.on("create", "Create a file.") do
+            context.command = "create"
+            parser.on("--video-id ID", "The identifier of the video.") do |video_id|
+              context.params["video_id"] = JSON::Any.new(video_id)
+            end
+            parser.on(
+              "--upload-id ID",
+              "Upload ID of the file that should be used to create the document."
+            ) do |file_id|
+              context.params["upload_id"] = JSON::Any.new(file_id)
+            end
+          end
+          parser.on("destroy", "Destroy a document.") do
+            context.command = "destroy"
+            parser.on("--id ID", "The identifier of the document to destroy.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+          end
+        end
+
         parser.on("files", "Interact with files.") do
           context.resource = "files"
           parser.on("list", "List all files uploaded for a video.") do

@@ -65,6 +65,15 @@ module Teletube
         else
           @client.get_channels
         end
+      when "documents"
+        case context.command
+        when "create"
+          @client.create_document
+        when "destroy"
+          @client.destroy_document
+        else
+          @client.get_documents
+        end
       when "files"
         case context.command
         when "create"
