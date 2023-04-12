@@ -73,6 +73,18 @@ Each will have a URL and an optional original files. You can attempt to download
 
 Keep in mind that the download URLs will expire, so you shouldn't share them with others.
 
+# Upload a document with a video
+
+    teletube files upload DOCUMENT.DOCX
+
+This should print a NO_CONTENT response for every 50 megabytes uploaded. Error messages are handled as long as the command keeps running.
+
+Copy-paste the characters after 📃, this is the upload id.
+
+You can use a video id and upload id, to create a new document with the upload.
+
+    teletube documents create --video-id <id> --upload-id
+
 # Help
 
 You can always end a command with `--help` to get more details. For example:

@@ -74,6 +74,10 @@ module Teletube
       def create_file
         headers = self.class.headers
         headers["Upload-Length"] = File.size(filename).to_s
+        if @filename
+          name = @filename.split("/").last
+          headers["Upload-Metadata"] = "filename #{Base64.strict_encode(name)}"
+        end
         response = handle_response(http.post(path: "/files", headers: headers))
         if response.status_code >= 200 && response.status_code < 300
           @location = response.headers["Location"]
@@ -147,7 +151,8 @@ module Teletube
 
       upload = Upload.new(@http, @context.filename || "")
       upload.perform
-      @context.params["upload_id"] = JSON::Any.new(upload.id)
+      @context.params["filename"] =
+        @context.params["upload_id"] = JSON::Any.new(upload.id)
     end
 
     def get_files
@@ -192,9 +197,20 @@ module Teletube
     end
 
     def destroy_video
-      handle_response(
-        @http.delete(path: "/api/v1/videos/#{@context.params["id"]}")
-      )
+      handle_response(@http.delete(path: "/api/v1/videos/#{@context.params["id"]}"))
+    end
+
+    def get_documents
+      handle_response(@http.get(path: "/api/v1/videos/#{@context.params["video_id"]}/documents"))
+    end
+
+    def create_document
+      upload_file
+      handle_response(@http.post(path: "/api/v1/documents", params: @context.params))
+    end
+
+    def destroy_document
+      handle_response(@http.delete(path: "/api/v1/documents/#{@context.params["id"]}"))
     end
 
     def get_languages
