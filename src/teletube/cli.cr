@@ -23,6 +23,13 @@ module Teletube
       case context.resource
       when "artworks"
         @client.create_artwork
+      when "avatars"
+        case context.command
+        when "destroy"
+          @client.destroy_avatars
+        else
+          @client.create_avatar
+        end
       when "browse"
         case context.command
         when "channels"

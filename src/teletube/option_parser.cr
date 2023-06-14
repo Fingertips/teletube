@@ -17,6 +17,22 @@ module Teletube
           end
         end
 
+        parser.on("avatars", "Interact with avatars.") do
+          context.resource = "avatars"
+          parser.on("create", "Upload a new avatar.") do
+            context.command = "create"
+            parser.on(
+              "--upload-id ID",
+              "Upload ID of the file that should be used to create the avatar."
+            ) do |file_id|
+              context.params["upload_id"] = JSON::Any.new(file_id)
+            end
+          end
+          parser.on("destroy", "Destroy all uploaded avatars.") do
+            context.command = "destroy"
+          end
+        end
+
         parser.on("config", "Configure common options.") do
           context.resource = "config"
           parser.on("--token TOKEN", "Access token used to access the web service") do |token|

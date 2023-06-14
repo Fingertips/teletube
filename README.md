@@ -85,6 +85,18 @@ You can use a video id and upload id, to create a new document with the upload.
 
     teletube documents create --video-id <id> --upload-id
 
+# Upload a new avatar for a profile
+
+    teletube files upload AVATAR.JPG
+
+This should print a NO_CONTENT response for every 50 megabytes uploaded. Error messages are handled as long as the command keeps running.
+
+Copy-paste the characters after 📃, this is the upload id.
+
+You can create a new avatar with the upload id.
+
+    teletube avatars create --upload-id <upload-id>
+
 # Help
 
 You can always end a command with `--help` to get more details. For example:
