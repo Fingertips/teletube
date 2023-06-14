@@ -209,6 +209,15 @@ module Teletube
       handle_response(@http.post(path: "/api/v1/documents", params: @context.params))
     end
 
+    def create_avatar
+      upload_file
+      handle_response(@http.post(path: "/api/v1/avatars", params: @context.params))
+    end
+
+    def destroy_avatars
+      handle_response(@http.delete(path: "/api/v1/avatars"))
+    end
+
     def destroy_document
       handle_response(@http.delete(path: "/api/v1/documents/#{@context.params["id"]}"))
     end
