@@ -35,7 +35,7 @@ module Teletube
         parser.on("--no-downloadable", "Opposite of --downloadable") do
           context.params["downloadable"] = JSON::Any.new(false)
         end
-        parser.on("--archive-original-video-files", "The uploaded video file will be archived and will continue to be available for download to the channel admins.") do
+        parser.on("--archive-original-video-files", "Deprecated. The uploaded video file is now always archived.") do
           context.params["archive_original_video_files"] = JSON::Any.new(true)
         end
         parser.on("--no-archive-original-video-files", "Opposite of --archive-original-video-files") do
