@@ -3,7 +3,7 @@ require "yaml"
 module Teletube
   class Config
     ENDPOINT = "https://tube.switch.ch"
-    PATH = Path["~/.teletube.yml"].expand(home: true)
+    PATH     = Path["~/.teletube.yml"].expand(home: true)
 
     getter token : String?
     getter endpoint : String?
@@ -16,8 +16,8 @@ module Teletube
     end
 
     def attributes=(attributes : YAML::Any)
-      @token = attributes["token"].as_s if attributes["token"]
-      @endpoint = attributes["endpoint"].as_s if attributes["endpoint"]
+      @token = attributes["token"].as_s?
+      @endpoint = attributes["endpoint"].as_s?
     end
 
     def attributes=(attributes : Hash(String, String))
@@ -31,7 +31,7 @@ module Teletube
 
     def save(path = PATH)
       File.open(path, "wb") do |file|
-        file << YAML.dump({ "token" => @token, "endpoint" => @endpoint })
+        file << YAML.dump({"token" => @token, "endpoint" => @endpoint})
       end
     end
 

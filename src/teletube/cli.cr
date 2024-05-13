@@ -53,8 +53,8 @@ module Teletube
         end
       when "config"
         @config.attributes = {
-          "endpoint" => context.params["endpoint"].as_s,
-          "token"    => context.params["token"].as_s,
+          "endpoint" => endoint,
+          "token"    => token,
         }
         @config.save
       when "categories"
@@ -130,6 +130,16 @@ module Teletube
       context.errors.each do |error|
         STDERR.puts("⚠️  #{error}")
       end
+    end
+
+    private def endoint
+      endpoint = context.params["endpoint"]?
+      endpoint ? endpoint.as_s : ""
+    end
+
+    private def token
+      token = context.params["token"]?
+      token ? token.as_s : ""
     end
   end
 end
