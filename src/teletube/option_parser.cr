@@ -64,7 +64,7 @@ module Teletube
           parser.on("list", "List all owned channels.") do
             context.command = "list"
             parser.on("--role ROLE", "The role of the authenticated profile.") do |role|
-              if %w[owner contributor].includes?(role)
+              if %w[owner contributor collaborator].includes?(role)
                 context.params["role"] = JSON::Any.new(role)
               else
                 context.errors << "Please specify either owner or contributor for the role."
