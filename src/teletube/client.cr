@@ -201,7 +201,11 @@ module Teletube
     end
 
     def get_documents
-      handle_response(@http.get(path: "/api/v1/videos/#{@context.params["video_id"]}/documents"))
+      if @context.params.has_key?("video_id")
+        handle_response(@http.get(path: "/api/v1/videos/#{@context.params["video_id"]}/documents"))
+      elsif @context.params.has_key?("channel_id")
+        handle_response(@http.get(path: "/api/v1/channels/#{@context.params["channel_id"]}/documents"))
+      end
     end
 
     def create_document

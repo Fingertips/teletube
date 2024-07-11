@@ -98,14 +98,20 @@ module Teletube
 
         parser.on("documents", "Interact with documents.") do
           context.resource = "documents"
-          parser.on("list", "List all documents uploaded for a video.") do
+          parser.on("list", "List all documents uploaded for a channel or video.") do
             context.command = "list"
+            parser.on("--channel-id ID", "The identifier of the channel.") do |video_id|
+              context.params["channel_id"] = JSON::Any.new(video_id)
+            end
             parser.on("--video-id ID", "The identifier of the video.") do |video_id|
               context.params["video_id"] = JSON::Any.new(video_id)
             end
           end
           parser.on("create", "Create a file.") do
             context.command = "create"
+            parser.on("--channel-id ID", "The identifier of the channel.") do |video_id|
+              context.params["channel_id"] = JSON::Any.new(video_id)
+            end
             parser.on("--video-id ID", "The identifier of the video.") do |video_id|
               context.params["video_id"] = JSON::Any.new(video_id)
             end
