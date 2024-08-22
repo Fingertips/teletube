@@ -50,6 +50,8 @@ module Teletube
           @client.get_browsable_audio_variants
         when "waveform"
           @client.get_browsable_waveform
+        when "chapter-markers"
+          @client.get_browsable_chapter_markers
         end
       when "config"
         @config.attributes = {

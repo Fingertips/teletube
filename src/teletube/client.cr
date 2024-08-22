@@ -288,6 +288,10 @@ module Teletube
       handle_response(@http.get(path: "/api/v1/browse/videos/#{@context.params["video_id"]}/waveform"))
     end
 
+    def get_browsable_chapter_markers
+      handle_response(@http.get(path: "/api/v1/browse/videos/#{@context.params["video_id"]}/chapter_markers"))
+    end
+
     def handle_response(response)
       STDERR.puts "⚡️ #{response.status} (#{response.status_code})"
       puts response.body unless response.body.blank?

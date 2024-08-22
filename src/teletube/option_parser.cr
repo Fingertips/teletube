@@ -289,6 +289,12 @@ module Teletube
               context.params["video_id"] = JSON::Any.new(id)
             end
           end
+          parser.on("chapter-markers", "Show details about the chapter markers for a video.") do
+            context.command = "chapter-markers"
+            parser.on("--video-id ID", "The public identifier of the video.") do |id|
+              context.params["video_id"] = JSON::Any.new(id)
+            end
+          end
         end
 
         parser.separator "Other options:"
