@@ -295,6 +295,18 @@ module Teletube
               context.params["video_id"] = JSON::Any.new(id)
             end
           end
+          parser.on("text-tracks", "Show details for the text-tracks for a video.") do
+            context.command = "text-tracks"
+            parser.on("--video-id ID", "The public identifier of the video.") do |id|
+              context.params["video_id"] = JSON::Any.new(id)
+            end
+            parser.on("--language LANGUAGE", "Which of the tracks you want to fetch.") do |language|
+              context.params["language"] = JSON::Any.new(language)
+            end
+            parser.on("--format <srt|vvt|txt>", "Which of the tracks you want to fetch.") do |format|
+              context.params["format"] = JSON::Any.new(format)
+            end
+          end
         end
 
         parser.separator "Other options:"

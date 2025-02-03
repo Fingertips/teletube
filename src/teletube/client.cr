@@ -93,7 +93,7 @@ module Teletube
           if response.status_code == 200
             offset = response.headers["Upload-Offset"].to_i
           elsif response.status_code == 423
-            sleep 10
+            sleep(1.second)
           end
         end
         offset
@@ -290,6 +290,36 @@ module Teletube
 
     def get_browsable_chapter_markers
       handle_response(@http.get(path: "/api/v1/browse/videos/#{@context.params["video_id"]}/chapter_markers"))
+    end
+
+    def get_browsable_text_tracks
+      handle_response(@http.get(path: "/api/v1/browse/videos/#{@context.params["video_id"]}/text_tracks"))
+    end
+
+    def get_browsable_text_track
+      response = get_browsable_text_tracks
+      if response.status_code == 200
+        text_tracks = JSON.parse(response.body).as_a
+        text_tracks.each do |text_track|
+          if @context.params.has_key?("language")
+            if @context.params["language"].as_s == text_track["language"].as_s
+              print_browsable_text_track(text_track)
+              return
+            end
+          else
+            print_browsable_text_track(text_track)
+            return
+          end
+        end
+      end
+    end
+
+    def print_browsable_text_track(text_track)
+      path = text_track["#{@context.params["format"]}_path"].as_s
+      response = handle_response(@http.get(path: path))
+      if response.status_code == 200
+        puts response.body
+      end
     end
 
     def handle_response(response)

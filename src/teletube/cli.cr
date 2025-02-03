@@ -52,6 +52,12 @@ module Teletube
           @client.get_browsable_waveform
         when "chapter-markers"
           @client.get_browsable_chapter_markers
+        when "text-tracks"
+          if context.params.has_key?("format")
+            @client.get_browsable_text_track
+          else
+            @client.get_browsable_text_tracks
+          end
         end
       when "config"
         @config.attributes = {
