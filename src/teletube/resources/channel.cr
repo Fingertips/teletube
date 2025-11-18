@@ -2,7 +2,10 @@ module Teletube
   module Resources
     class Channel
       macro parse_properties(parser, context)
-        parser.on("--name NAME", "Display name of the channel.") do |value|
+        parser.on("--title TITLE", "The title of the channel") do |value|
+          context.params["title"] = JSON::Any.new(value)
+        end
+        parser.on("--name NAME", "Deprecated, please use title instead.") do |value|
           context.params["name"] = JSON::Any.new(value)
         end
         parser.on("--description DESCRIPTION", "Description of a channel, the text may contain a limited set of HTML tags: p, h3, ul, ol, li, pre, blockquote, a, em, strong.") do |value|

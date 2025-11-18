@@ -80,6 +80,48 @@ module Teletube
         else
           @client.get_channels
         end
+      when "collaborators"
+        case context.command
+        when "create"
+          @client.create_collaborator
+        when "destroy"
+          @client.destroy_collaborator
+        else
+          @client.get_collaborators
+        end
+      when "collaborator-invitations"
+        case context.command
+        when "create"
+          @client.create_collaborator_invitation
+        when "destroy"
+          @client.destroy_collaborator_invitation
+        else
+          @client.get_collaborator_invitations
+        end
+      when "collection-items"
+        case context.command
+        when "create"
+          @client.create_collection_item
+        when "update"
+          @client.update_collection_item
+        when "destroy"
+          @client.destroy_collection_item
+        else
+          @client.get_collection_items
+        end
+      when "collections"
+        case context.command
+        when "create"
+          @client.create_collection
+        when "show"
+          @client.get_collection
+        when "update"
+          @client.update_collection
+        when "destroy"
+          @client.destroy_collection
+        else
+          @client.get_collections
+        end
       when "documents"
         case context.command
         when "create"
@@ -109,6 +151,8 @@ module Teletube
         else
           @client.get_profiles_me
         end
+      when "positions"
+        @client.update_positions
       when "progress"
         @client.get_video_progress
       when "restorations"

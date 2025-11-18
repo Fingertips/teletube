@@ -7,7 +7,12 @@ require 'json'
 BASE_URI = 'https://tube.switch.ch'
 RESOURCES = {
   'channel' => '/schema/v1/channel.json',
-  'video' => '/schema/v1/video.json'
+  'video' => '/schema/v1/video.json',
+  'collection' => '/schema/v1/collection.json',
+  'create_collection_item' => '/schema/v1/create_collection_item.json',
+  'update_collection_item' => '/schema/v1/update_collection_item.json',
+  'create_collaborator' => '/schema/v1/create_collaborator.json',
+  'create_collaborator_invitation' => '/schema/v1/create_collaborator_invitation.json',
 }.freeze
 
 class Property
