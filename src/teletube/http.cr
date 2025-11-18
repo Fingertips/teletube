@@ -50,7 +50,7 @@ module Teletube
       @http.post(path: path, headers: all, body: body)
     end
 
-    def patch(path : String, params : Hash(String, JSON::Any))
+    def patch(path : String, params : Array | Hash(String, JSON::Any))
       @http.patch(path: path, headers: @headers, body: params.to_json)
     end
 

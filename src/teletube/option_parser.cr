@@ -96,6 +96,146 @@ module Teletube
           end
         end
 
+        parser.on(
+          "collaborator-invitations",
+          "Invite people to collaborator on channels or collections"
+        ) do
+          context.resource = "collaborator-invitations"
+          context.command = "list"
+          parser.separator ""
+          parser.separator "Actions:"
+          parser.on("list", "List all invitations for a channel or collection.") do
+            context.command = "list"
+
+            parser.on("--type TYPE", "Either ‘channels’ or ‘collections’.") do |type|
+              context.params["type"] = JSON::Any.new(type)
+            end
+
+            parser.on("--id ID", "The identifier of the channel or collection.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+          end
+          parser.on("create", "Create a new invitation to a channel or collection.") do
+            context.command = "create"
+
+            parser.on("--type TYPE", "Either ‘channels’ or ‘collections’.") do |type|
+              context.params["type"] = JSON::Any.new(type)
+            end
+
+            parser.on("--id ID", "The identifier of the channel or collection.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+
+            Teletube::Resources::CreateCollaboratorInvitation.parse_properties(parser, context)
+          end
+          parser.on("destroy", "Delete a collaborator invitation.") do
+            context.command = "destroy"
+            parser.on("--id ID", "The identifier of the collaborator invitation to remove.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+          end
+        end
+
+        parser.on("collaborators", "Add collaborators to a channel or collection") do
+          context.resource = "collaborators"
+          context.command = "list"
+          parser.separator ""
+          parser.separator "Actions:"
+          parser.on("list", "List all collaborators for a channel or collection.") do
+            context.command = "list"
+
+            parser.on("--type TYPE", "Either ‘channels’ or ‘collections’.") do |type|
+              context.params["type"] = JSON::Any.new(type)
+            end
+
+            parser.on("--id ID", "The identifier of the channel or collection.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+          end
+          parser.on("create", "Create a new collaborator for a channel or collection.") do
+            context.command = "create"
+
+            parser.on("--type TYPE", "Either ‘channels’ or ‘collections’.") do |type|
+              context.params["type"] = JSON::Any.new(type)
+            end
+
+            parser.on("--id ID", "The identifier of the channel or collection.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+
+            Teletube::Resources::CreateCollaborator.parse_properties(parser, context)
+          end
+          parser.on("destroy", "Delete a collaborator.") do
+            context.command = "destroy"
+            parser.on("--id ID", "The identifier of the collaborator invitation to remove.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+          end
+        end
+
+        parser.on("collection-items", "Manage items in a collection.") do
+          context.resource = "collection-items"
+          context.command = "list"
+          parser.separator ""
+          parser.separator "Actions:"
+          parser.on("list", "List all items in a collection.") do
+            context.command = "list"
+            parser.on("--collection-id ID", "The identifier of the collection.") do |id|
+              context.params["collection_id"] = JSON::Any.new(id)
+            end
+          end
+          parser.on("create", "Create a new collection item.") do
+            context.command = "create"
+            Teletube::Resources::CreateCollectionItem.parse_properties(parser, context)
+          end
+          parser.on("update", "Create note for a collectin item.") do
+            context.command = "update"
+            parser.on("--id ID", "The identifier of the collection item to update.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+            Teletube::Resources::UpdateCollectionItem.parse_properties(parser, context)
+          end
+          parser.on("destroy", "Remove a collection item from a collection.") do
+            context.command = "destroy"
+            parser.on("--id ID", "The identifier of the collection item to remove.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+          end
+        end
+
+        parser.on("collections", "Interact with collections.") do
+          context.resource = "collections"
+          context.command = "list"
+          parser.separator ""
+          parser.separator "Actions:"
+          parser.on("list", "List all editable collections.") do
+            context.command = "list"
+          end
+          parser.on("create", "Create a new collection.") do
+            context.command = "create"
+            Teletube::Resources::Collection.parse_properties(parser, context)
+          end
+          parser.on("show", "Show details about a collection.") do
+            context.command = "show"
+            parser.on("--id ID", "The identifier of the collection to show.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+          end
+          parser.on("update", "Update details for a collection.") do
+            context.command = "update"
+            parser.on("--id ID", "The identifier of the collection to update.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+            Teletube::Resources::Collection.parse_properties(parser, context)
+          end
+          parser.on("destroy", "Destroy a collection.") do
+            context.command = "destroy"
+            parser.on("--id ID", "The identifier of the collection to destroy.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+          end
+        end
+
         parser.on("documents", "Interact with documents.") do
           context.resource = "documents"
           parser.on("list", "List all documents uploaded for a channel or video.") do
@@ -199,14 +339,34 @@ module Teletube
           context.command = "list"
         end
 
+        parser.on("positions", "Manage order for resources.") do
+          context.resource = "positions"
+          parser.on("update", "Re-order collection items.") do
+            context.command = "update"
+
+            parser.on("--id ID", "The identifier of the profile to show.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+
+            parser.on("--type TYPE", "Currenly only ‘collections’ is suported.") do |type|
+              context.params["type"] = JSON::Any.new(type)
+            end
+
+            parser.on("--id ID", "The identifier of the video or channel.") do |id|
+              context.params["id"] = JSON::Any.new(id)
+            end
+
+            parser.on("--positions POSITIONS", "Comma-separated list of ids, eg: 23,32,1,172") do |ids|
+              context.params["positions"] = JSON::Any.new(ids)
+            end
+          end
+        end
+
         parser.on("profiles", "Interact with user profiles.") do
           context.resource = "profiles"
           context.command = "me"
           parser.on("show", "Show details about a profile.") do
             context.command = "show"
-            parser.on("--id ID", "The identifier of the profile to show.") do |id|
-              context.params["id"] = JSON::Any.new(id)
-            end
           end
         end
 
@@ -222,7 +382,7 @@ module Teletube
           context.resource = "restorations"
           context.command = "create"
 
-          parser.on("--type TYPE", "Either ‘channels’ or ‘videos’.") do |type|
+          parser.on("--type TYPE", "Either ‘channels’, ‘videos’, or ‘collections’.") do |type|
             context.params["type"] = JSON::Any.new(type)
           end
 

@@ -44,6 +44,109 @@ module Teletube
       )
     end
 
+    def get_collaborators
+      handle_response(
+        @http.get(
+          path:
+            "/api/v1/#{@context.params["type"]}/#{@context.params["id"]}" \
+            "/collaborators"
+        )
+      )
+    end
+
+    def create_collaborator
+      handle_response(
+        @http.post(
+          path:
+            "/api/v1/#{@context.params["type"]}/#{@context.params["id"]}" \
+            "/collaborators",
+          params: @context.params
+        )
+      )
+    end
+
+    def destroy_collaborator
+      handle_response(@http.delete(path: "/api/v1/collaborators/#{@context.params["id"]}"))
+    end
+
+    def get_collaborator_invitations
+      handle_response(
+        @http.get(
+          path:
+            "/api/v1/#{@context.params["type"]}/#{@context.params["id"]}" \
+            "/collaborator_invitations"
+        )
+      )
+    end
+
+    def create_collaborator_invitation
+      handle_response(
+        @http.post(
+          path:
+            "/api/v1/#{@context.params["type"]}/#{@context.params["id"]}" \
+            "/collaborator_invitations",
+          params: @context.params
+        )
+      )
+    end
+
+    def destroy_collaborator_invitation
+      handle_response(
+        @http.delete(path: "/api/v1/collaborator_invitations/#{@context.params["id"]}")
+      )
+    end
+
+    def get_collection_items
+      handle_response(
+        @http.get(path: "/api/v1/collections/#{@context.params["collection_id"]}/collection_items")
+      )
+    end
+
+    def create_collection_item
+      handle_response(
+        @http.post(
+          path: "/api/v1/collections/#{@context.params["collection_id"]}/collection_items",
+          params: @context.params
+        )
+      )
+    end
+
+    def update_collection_item
+      handle_response(
+        @http.patch(
+          path: "/api/v1/collection_items/#{@context.params["id"]}", params: @context.params
+        )
+      )
+    end
+
+    def destroy_collection_item
+      handle_response(@http.delete(path: "/api/v1/collection_items/#{@context.params["id"]}"))
+    end
+
+    def get_collections
+      handle_response(@http.get(path: "/api/v1/collections"))
+    end
+
+    def create_collection
+      handle_response(@http.post(path: "/api/v1/collections", params: @context.params))
+    end
+
+    def get_collection
+      handle_response(@http.get(path: "/api/v1/collections/#{@context.params["id"]}"))
+    end
+
+    def update_collection
+      handle_response(
+        @http.patch(path: "/api/v1/collections/#{@context.params["id"]}", params: @context.params)
+      )
+    end
+
+    def destroy_collection
+      handle_response(
+        @http.delete(path: "/api/v1/collections/#{@context.params["id"]}")
+      )
+    end
+
     class Upload
       # 50 megabytes
       SEGMENT_SIZE = 52428800
@@ -205,6 +308,8 @@ module Teletube
         handle_response(@http.get(path: "/api/v1/videos/#{@context.params["video_id"]}/documents"))
       elsif @context.params.has_key?("channel_id")
         handle_response(@http.get(path: "/api/v1/channels/#{@context.params["channel_id"]}/documents"))
+      else
+        handle_response(@http.get(path: "/api/v1/documents"))
       end
     end
 
@@ -236,6 +341,18 @@ module Teletube
 
     def get_profiles_me
       handle_response(@http.get(path: "/api/v1/profiles/me"))
+    end
+
+    def update_positions
+      positions = @context.params["positions"].as_s.split(",").map do |position|
+        position.to_i
+      end
+      handle_response(
+        @http.patch(
+          path: "/api/v1/#{@context.params["type"]}/#{@context.params["id"]}/positions",
+          params: positions
+        ),
+      )
     end
 
     def get_video_progress
