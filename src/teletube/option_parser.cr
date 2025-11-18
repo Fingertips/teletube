@@ -186,6 +186,11 @@ module Teletube
           end
           parser.on("create", "Create a new collection item.") do
             context.command = "create"
+
+            parser.on("--collection-id ID", "The identifier of the collection.") do |id|
+              context.params["collection_id"] = JSON::Any.new(id)
+            end
+
             Teletube::Resources::CreateCollectionItem.parse_properties(parser, context)
           end
           parser.on("update", "Create note for a collectin item.") do
