@@ -12,8 +12,14 @@ module Teletube
         parser.on("artworks", "Interact with channel artworks.") do
           context.resource = "artworks"
           context.command = "create"
-          parser.on("--secret SECRET", "Upload secret used to create the artwork.") do |secret|
-            context.params["secret"] = JSON::Any.new(secret)
+          parser.on("--channel-id ID", "The identifier of the channel.") do |channel_id|
+            context.params["channel_id"] = JSON::Any.new(channel_id)
+          end
+          parser.on(
+            "--upload-id ID",
+            "Upload ID of the file that should be used to create the artwork."
+          ) do |upload_id|
+            context.params["upload_id"] = JSON::Any.new(upload_id)
           end
         end
 
@@ -24,8 +30,8 @@ module Teletube
             parser.on(
               "--upload-id ID",
               "Upload ID of the file that should be used to create the avatar."
-            ) do |file_id|
-              context.params["upload_id"] = JSON::Any.new(file_id)
+            ) do |upload_id|
+              context.params["upload_id"] = JSON::Any.new(upload_id)
             end
           end
           parser.on("destroy", "Destroy all uploaded avatars.") do
@@ -245,8 +251,8 @@ module Teletube
           context.resource = "documents"
           parser.on("list", "List all documents uploaded for a channel or video.") do
             context.command = "list"
-            parser.on("--channel-id ID", "The identifier of the channel.") do |video_id|
-              context.params["channel_id"] = JSON::Any.new(video_id)
+            parser.on("--channel-id ID", "The identifier of the channel.") do |channel_id|
+              context.params["channel_id"] = JSON::Any.new(channel_id)
             end
             parser.on("--video-id ID", "The identifier of the video.") do |video_id|
               context.params["video_id"] = JSON::Any.new(video_id)

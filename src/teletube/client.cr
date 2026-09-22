@@ -9,7 +9,12 @@ module Teletube
     end
 
     def create_artwork
-      handle_response(@http.post(path: "/api/v1/uploads/#{@context.params["upload_id"]}/artwork"))
+      handle_response(
+        @http.post(
+          path: "/api/v1/artworks",
+          params: @context.params
+        )
+      )
     end
 
     def get_categories
