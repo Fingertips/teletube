@@ -20,6 +20,9 @@ module Teletube
         parser.on("--license-code LICENSE_CODE", "Can be used to set a specific license for use of the video. See https://creativecommons.org/licenses/ for more information about what the licenses mean.") do |value|
           context.params["license_code"] = JSON::Any.new(value)
         end
+        parser.on("--language LANGUAGE", "Content language selected by a video editor.") do |value|
+          context.params["language"] = JSON::Any.new(value)
+        end
       end
     end
   end
