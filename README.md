@@ -1,6 +1,6 @@
 # Teletube
 
-A command-line interface for interacting with the SWITCHtube web service.
+A command-line interface for interacting with the Switch Tube web service.
 
 # Install
 
@@ -20,7 +20,7 @@ If want to format or transform the resulting JSON is can be useful to install `j
 
 # Configure
 
-Go into your SWITCHtube account and follow the instructions to get an authentication token for the web service.
+Go into your Switch Tube account and follow the instructions to get an authentication token for the web service.
 
     teletube config --token <token>
 
