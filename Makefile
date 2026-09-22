@@ -2,7 +2,7 @@ all: teletube
 
 teletube: main.cr src/**/*.cr
 	shards
-	bundle
+	bundle install
 	bundle exec ruby scripts/options.rb
 	crystal build --error-trace -o teletube main.cr
 	@strip teletube
@@ -10,7 +10,7 @@ teletube: main.cr src/**/*.cr
 
 release: main.cr src/**/*.cr
 	shards
-	bundle
+	bundle install
 	bundle exec ruby scripts/options.rb
 	crystal build main.cr --release -o teletube
 	@strip teletube
